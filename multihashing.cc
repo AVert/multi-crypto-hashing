@@ -10,7 +10,6 @@ extern "C" {
     #include "quark.h"
     #include "scryptn.h"
     #include "scryptn.h"
-    #include "neoscrypt.h"
     #include "skein.h"
     #include "x11.h"
     #include "groestl.h"
@@ -25,6 +24,7 @@ extern "C" {
     #include "sha1.h"
     #include "x15.h"
     #include "fresh.h"
+    #include "neoscrypt.h"
 }
 
 #include "boolberry.h"
@@ -32,15 +32,10 @@ extern "C" {
 using namespace node;
 using namespace v8;
 
-
-
 void except(const char* msg)
 {
 	Nan::ThrowError(Exception::Error(Nan::New<String>(msg).ToLocalChecked()));
 }
-
-
-
 
 NAN_METHOD(quark)
 {
@@ -73,10 +68,7 @@ NAN_METHOD(quark)
 			info.GetReturnValue().Set(result);
 		}
 	}
-
-
 }
-
 
 NAN_METHOD(x11)
 {
@@ -146,8 +138,7 @@ NAN_METHOD(scryptHash)
 			info.GetReturnValue().Set(result);
 		}
 	}
-
-
+}
 
 NAN_METHOD(scryptn)
 {
@@ -185,56 +176,6 @@ NAN_METHOD(scryptn)
 	}
 
 }
-
-/*
-NAN_METHOD(scryptjane)
-{
-	Isolate* isolate = info.GetIsolate();
-	HandleScope scope(isolate);
-	if (info.Length() < 5)
-	{
-		except("You must provide two argument : buffer, timestamp as number, and nChainStarTime as number, nMin, and nMax");
-	}
-	else
-	{
-		Local<Object> target = info[0]->ToObject();
-		if (!node::Buffer::HasInstance(target))
-		{
-			except("Argument should be a buffer object.");
-
-		}
-		else
-		{
-			Local<Number> num = info[1]->ToNumber();
-			int timestamp = num->Value();
-
-			Local<Number> num2 = info[2]->ToNumber();
-			int nChainStartTime = num2->Value();
-
-			Local<Number> num3 = info[3]->ToNumber();
-			int nMin = num3->Value();
-
-			Local<Number> num4 = info[4]->ToNumber();
-			int nMax = num4->Value();
-
-
-			char * input = Buffer::Data(target);
-			char* output = (char*)malloc(32);
-
-			uint32_t input_len = Buffer::Length(target);
-
-			scryptjane_hash(input, input_len, (uint32_t *)output, GetNfactorJane(timestamp, nChainStartTime, nMin, nMax));
-
-			auto result = node::Buffer::New(isolate, output, 32).ToLocalChecked();
-
-			info.GetReturnValue().Set(result);
-		}
-	}
-
-}
-
-*/
-
 
 NAN_METHOD(keccak)
 {
@@ -335,7 +276,6 @@ NAN_METHOD(skein)
 
 }
 
-
 NAN_METHOD(groestl)
 {
 	Isolate* isolate = info.GetIsolate();
@@ -369,8 +309,6 @@ NAN_METHOD(groestl)
 
 }
 
-
-
 NAN_METHOD(groestlmyriad)
 {
 	Isolate* isolate = info.GetIsolate();
@@ -403,10 +341,6 @@ NAN_METHOD(groestlmyriad)
 	}
 
 }
-
-
-
-
 
 NAN_METHOD(blake)
 {
@@ -506,7 +440,6 @@ NAN_METHOD(qubit)
 	}
 
 }
-
 
 NAN_METHOD(hefty1)
 {
@@ -655,9 +588,6 @@ NAN_METHOD(x13)
 
 }
 
-//*********
-
-
 NAN_METHOD(boolberry)
 {
 	Isolate* isolate = info.GetIsolate();
@@ -744,9 +674,6 @@ NAN_METHOD(nist5)
 
 }
 
-
-
-
 NAN_METHOD(sha1)
 {
 	Isolate* isolate = info.GetIsolate();
@@ -779,7 +706,6 @@ NAN_METHOD(sha1)
 	}
 
 }
-
 
 NAN_METHOD(x15)
 {
@@ -814,7 +740,6 @@ NAN_METHOD(x15)
 
 }
 
-
 NAN_METHOD(fresh)
 {
 	Isolate* isolate = info.GetIsolate();
@@ -848,10 +773,91 @@ NAN_METHOD(fresh)
 
 }
 
+NAN_METHOD(neoscrypt)
+{
+	Isolate* isolate = info.GetIsolate();
+	HandleScope scope(isolate);
+	if (info.Length() < 1)
+	{
+		except("You must provide one argument.");
+	}
+	else
+	{
+		Local<Object> target = info[0]->ToObject();
+		if (!node::Buffer::HasInstance(target))
+		{
+			except("Argument should be a buffer object.");
+
+		}
+		else
+		{
+			char * input = Buffer::Data(target);
+			char* output = (char*)malloc(32);
+
+			uint32_t input_len = Buffer::Length(target);
+
+			neoscrypt_hash(input, output, input_len);
+
+			auto result = node::Buffer::New(isolate, output, 32).ToLocalChecked();
+
+			info.GetReturnValue().Set(result);
+		}
+	}
+
+}
+
+/*
+NAN_METHOD(scryptjane)
+{
+	Isolate* isolate = info.GetIsolate();
+	HandleScope scope(isolate);
+	if (info.Length() < 5)
+	{
+		except("You must provide two argument : buffer, timestamp as number, and nChainStarTime as number, nMin, and nMax");
+	}
+	else
+	{
+		Local<Object> target = info[0]->ToObject();
+		if (!node::Buffer::HasInstance(target))
+		{
+			except("Argument should be a buffer object.");
+
+		}
+		else
+		{
+			Local<Number> num = info[1]->ToNumber();
+			int timestamp = num->Value();
+
+			Local<Number> num2 = info[2]->ToNumber();
+			int nChainStartTime = num2->Value();
+
+			Local<Number> num3 = info[3]->ToNumber();
+			int nMin = num3->Value();
+
+			Local<Number> num4 = info[4]->ToNumber();
+			int nMax = num4->Value();
+
+
+			char * input = Buffer::Data(target);
+			char* output = (char*)malloc(32);
+
+			uint32_t input_len = Buffer::Length(target);
+
+			scryptjane_hash(input, input_len, (uint32_t *)output, GetNfactorJane(timestamp, nChainStartTime, nMin, nMax));
+
+			auto result = node::Buffer::New(isolate, output, 32).ToLocalChecked();
+
+			info.GetReturnValue().Set(result);
+		}
+	}
+
+}
+
+*/
+
 
 void init(Local<Object> exports) {
 	auto isolate = exports->GetIsolate();
-
 
 	exports->Set(String::NewFromUtf8(isolate, "quark"), Nan::GetFunction(Nan::New<FunctionTemplate>(quark)).ToLocalChecked());
     exports->Set(String::NewFromUtf8(isolate,"x11"), Nan::GetFunction(Nan::New<FunctionTemplate>(x11)).ToLocalChecked());
@@ -875,7 +881,7 @@ void init(Local<Object> exports) {
     exports->Set(String::NewFromUtf8(isolate,"sha1"), Nan::GetFunction(Nan::New<FunctionTemplate>(sha1)).ToLocalChecked());
     exports->Set(String::NewFromUtf8(isolate,"x15"), Nan::GetFunction(Nan::New<FunctionTemplate>(x15)).ToLocalChecked());
     exports->Set(String::NewFromUtf8(isolate,"fresh"), Nan::GetFunction(Nan::New<FunctionTemplate>(fresh)).ToLocalChecked());
-    exports->Set(String::NewFromUtf8(isolate,"neoscrypt"), Nan::GetFunction(Nan::New<FunctionTemplate>(neoscrypt_hash)).ToLocalChecked());
+    exports->Set(String::NewFromUtf8(isolate,"neoscrypt"), Nan::GetFunction(Nan::New<FunctionTemplate>(neoscrypt)).ToLocalChecked());
 }
 
 NODE_MODULE(multihashing, init)
