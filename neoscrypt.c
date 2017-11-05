@@ -1138,7 +1138,7 @@ static void neoscrypt_blkmix(uint *X, uint *Y, uint r, uint mixmode) {
  *     .....
  *     11110 = N of 2147483648;
  *   profile bits 30 to 13 are reserved */
-void neoscrypt(const char *input, char *uoutput, int profile) {
+void neoscrypt_hash(const char *input, char *uoutput, int profile) {
     const unsigned char *password = input;
     const unsigned char *output = uoutput;
 		
@@ -1357,7 +1357,7 @@ int main() {
         printf("FastKDF integrity test passed.\n");
     }
 
-    neoscrypt(input, output, 0x80000620);
+    neoscrypt_hash(input, output, 0x80000620);
 
     uchar neoscrypt_ref[32] = {
         0x72, 0x58, 0x96, 0x1A, 0xFB, 0x33, 0xFD, 0x12,

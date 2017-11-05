@@ -10,6 +10,20 @@
 #include <string.h>
 #include <sys/param.h>
 
+/*#if defined(_WIN32)	|| defined(_WIN64) || defined(__TOS_WIN__) || defined(__WINDOWS__) || defined(_MSC_VER)
+	#include <windows.h>
+	#include <wincrypt.h>
+	#define OS_WINDOWS
+#elif defined(sun) || defined(__sun) || defined(__SVR4) || defined(__svr4__)
+	#include <sys/mman.h>
+	#include <sys/time.h>
+	#include <fcntl.h>
+	#define OS_SOLARIS
+#else
+    #include <sys/param.h>
+    #define OS_NIX
+#endif*/
+
 /*
  * Create GNU compatible endian macros. We use the values for __LITTLE_ENDIAN
  * and __BIG_ENDIAN based on endian.h.

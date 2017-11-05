@@ -7,7 +7,6 @@
 	#include <sys/mman.h>
 	#include <sys/time.h>
 	#include <fcntl.h>
-
 	#define OS_SOLARIS
 #else
 	#include <sys/mman.h>
@@ -15,7 +14,6 @@
 	#include <sys/param.h> /* need this to define BSD */
 	#include <unistd.h>
 	#include <fcntl.h>
-
 	#define OS_NIX
 	#if defined(__linux__)
 		#include <endian.h>
