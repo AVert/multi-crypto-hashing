@@ -8,7 +8,9 @@ extern "C" {
     #include "bcrypt.h"
     #include "keccak.h"
     #include "quark.h"
-      #include "scryptn.h"
+    #include "scryptn.h"
+    #include "scryptn.h"
+    #include "neoscrypt.h"
     #include "skein.h"
     #include "x11.h"
     #include "groestl.h"
@@ -20,9 +22,9 @@ extern "C" {
     #include "cryptonight.h"
     #include "x13.h"
     #include "nist5.h"
-    #include "sha1.h",
+    #include "sha1.h"
     #include "x15.h"
-	#include "fresh.h"
+    #include "fresh.h"
 }
 
 #include "boolberry.h"
@@ -71,7 +73,7 @@ NAN_METHOD(quark)
 			info.GetReturnValue().Set(result);
 		}
 	}
-	
+
 
 }
 
@@ -145,7 +147,6 @@ NAN_METHOD(scryptHash)
 		}
 	}
 
-}
 
 
 NAN_METHOD(scryptn)
@@ -599,7 +600,7 @@ NAN_METHOD(cryptonight)
 					except("Argument 2 should be a boolean");
 					return;
 				}
-					
+
 				fast = info[1]->ToBoolean()->BooleanValue();
 			}
 
@@ -688,10 +689,10 @@ NAN_METHOD(boolberry)
 					height = info[2]->ToUint32()->Uint32Value();
 				else
 				{
-					except("Argument 3 should be an unsigned integer."); 
+					except("Argument 3 should be an unsigned integer.");
 					return;
 				}
-					
+
 
 			char * input = Buffer::Data(target);
 			char * scratchpad = Buffer::Data(target_spad);
@@ -850,8 +851,8 @@ NAN_METHOD(fresh)
 
 void init(Local<Object> exports) {
 	auto isolate = exports->GetIsolate();
-	
-	
+
+
 	exports->Set(String::NewFromUtf8(isolate, "quark"), Nan::GetFunction(Nan::New<FunctionTemplate>(quark)).ToLocalChecked());
     exports->Set(String::NewFromUtf8(isolate,"x11"), Nan::GetFunction(Nan::New<FunctionTemplate>(x11)).ToLocalChecked());
     exports->Set(String::NewFromUtf8(isolate,"scrypt"), Nan::GetFunction(Nan::New<FunctionTemplate>(scryptHash)).ToLocalChecked());
@@ -874,6 +875,7 @@ void init(Local<Object> exports) {
     exports->Set(String::NewFromUtf8(isolate,"sha1"), Nan::GetFunction(Nan::New<FunctionTemplate>(sha1)).ToLocalChecked());
     exports->Set(String::NewFromUtf8(isolate,"x15"), Nan::GetFunction(Nan::New<FunctionTemplate>(x15)).ToLocalChecked());
     exports->Set(String::NewFromUtf8(isolate,"fresh"), Nan::GetFunction(Nan::New<FunctionTemplate>(fresh)).ToLocalChecked());
+    exports->Set(String::NewFromUtf8(isolate,"neoscrypt"), Nan::GetFunction(Nan::New<FunctionTemplate>(neoscrypt_hash)).ToLocalChecked());
 }
 
 NODE_MODULE(multihashing, init)
