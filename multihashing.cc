@@ -9,7 +9,6 @@ extern "C" {
     #include "keccak.h"
     #include "quark.h"
     #include "scryptn.h"
-    #include "scryptn.h"
     #include "skein.h"
     #include "x11.h"
     #include "groestl.h"
